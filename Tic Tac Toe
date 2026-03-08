@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tic Tac Toe</title>
+
+<style>
+
+body{
+font-family:Arial;
+text-align:center;
+background:linear-gradient(135deg,#667eea,#764ba2);
+color:white;
+}
+
+h1{
+margin-top:20px;
+}
+
+.board{
+display:grid;
+grid-template-columns:repeat(3,100px);
+gap:10px;
+justify-content:center;
+margin-top:30px;
+}
+
+.cell{
+width:100px;
+height:100px;
+background:white;
+color:black;
+font-size:40px;
+display:flex;
+justify-content:center;
+align-items:center;
+cursor:pointer;
+border-radius:10px;
+transition:0.3s;
+}
+
+.cell:hover{
+background:#f1f1f1;
+}
+
+/* WIN ANIMATION */
+@keyframes winFlash{
+0%{background:#00ff99;}
+50%{background:#ffff00;}
+100%{background:#00ff99;}
+}
+
+.win{
+animation:winFlash 1s infinite;
+}
+
+button{
+margin-top:20px;
+padding:10px 20px;
+font-size:16px;
+border:none;
+border-radius:6px;
+background:#28a745;
+color:white;
+cursor:pointer;
+}
+
+#status{
+font-size:20px;
+margin-top:15px;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>Tic Tac Toe</h1>
+<div id="status">Player X Turn</div>
+
+<div class="board">
+
+<div class="cell" onclick="play(this,0)"></div>
+<div class="cell" onclick="play(this,1)"></div>
+<div class="cell" onclick="play(this,2)"></div>
+
+<div class="cell" onclick="play(this,3)"></div>
+<div class="cell" onclick="play(this,4)"></div>
+<div class="cell" onclick="play(this,5)"></div>
+
+<div class="cell" onclick="play(this,6)"></div>
+<div class="cell" onclick="play(this,7)"></div>
+<div class="cell" onclick="play(this,8)"></div>
+
+</div>
+
+<button onclick="resetGame()">Reset Game</button>
+
+<script>
+
+let board=["","","","","","","","",""];
+let currentPlayer="X";
+let gameOver=false;
+
+let xMoves=0;
+let oMoves=0;
+
+const winPatterns=[
+[0,1,2],
+[3,4,5],
+[6,7,8],
+[0,3,6],
+[1,4,7],
+[2,5,8],
+[0,4,8],
+[2,4,6]
+];
+
+function play(cell,index){
+
+if(board[index]!=="" || gameOver) return;
+
+if(currentPlayer==="X" && xMoves>=3) return;
+if(currentPlayer==="O" && oMoves>=3) return;
+
+board[index]=currentPlayer;
+cell.innerText=currentPlayer;
+
+if(currentPlayer==="X") xMoves++;
+else oMoves++;
+
+checkWinner();
+
+currentPlayer=currentPlayer==="X"?"O":"X";
+
+if(!gameOver)
+document.getElementById("status").innerText="Player "+currentPlayer+" Turn";
+
+}
+
+function checkWinner(){
+
+for(let pattern of winPatterns){
+
+let a=pattern[0];
+let b=pattern[1];
+let c=pattern[2];
+
+if(board[a] && board[a]===board[b] && board[a]===board[c]){
+
+let cells=document.querySelectorAll(".cell");
+
+cells[a].classList.add("win");
+cells[b].classList.add("win");
+cells[c].classList.add("win");
+
+document.getElementById("status").innerText=
+"Player "+board[a]+" Wins!";
+
+gameOver=true;
+return;
+
+}
+
+}
+
+if(xMoves==3 && oMoves==3 && !gameOver){
+document.getElementById("status").innerText="Game Draw!";
+}
+
+}
+
+function resetGame(){
+
+board=["","","","","","","","",""];
+currentPlayer="X";
+gameOver=false;
+xMoves=0;
+oMoves=0;
+
+document.getElementById("status").innerText="Player X Turn";
+
+document.querySelectorAll(".cell").forEach(cell=>{
+cell.innerText="";
+cell.classList.remove("win");
+});
+
+}
+
+</script>
+
+</body>
+</html>
