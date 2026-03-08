@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Stopwatch</title>
+
+<style>
+
+body{
+    font-family: Arial;
+    background: linear-gradient(135deg,#4facfe,#00f2fe);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.container{
+    background:white;
+    padding:30px;
+    border-radius:15px;
+    text-align:center;
+    width:350px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.3);
+}
+
+#display{
+    font-size:40px;
+    margin-bottom:20px;
+}
+
+button{
+    padding:10px 15px;
+    margin:5px;
+    font-size:15px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.start{background:#28a745;color:white;}
+.pause{background:#ffc107;}
+.reset{background:#dc3545;color:white;}
+.lap{background:#007bff;color:white;}
+
+button:hover{
+    transform:scale(1.05);
+}
+
+#laps{
+    margin-top:20px;
+    max-height:150px;
+    overflow-y:auto;
+    text-align:left;
+}
+
+#laps li{
+    background:#f1f1f1;
+    padding:6px;
+    margin:5px 0;
+    border-radius:5px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Stopwatch</h2>
+
+<div id="display">00:00:000</div>
+
+<button class="start" onclick="start()">Start</button>
+<button class="pause" onclick="pause()">Pause</button>
+<button class="lap" onclick="lap()">Lap</button>
+<button class="reset" onclick="reset()">Reset</button>
+
+<ul id="laps"></ul>
+
+</div>
+
+<script>
+
+let minutes=0;
+let seconds=0;
+let milliseconds=0;
+let timer;
+let lapCount=1;
+
+function start(){
+
+if(timer) return;
+
+timer=setInterval(function(){
+
+milliseconds+=10;
+
+if(milliseconds==1000){
+milliseconds=0;
+seconds++;
+}
+
+if(seconds==60){
+seconds=0;
+minutes++;
+}
+
+document.getElementById("display").innerText=
+format(minutes)+":"+format(seconds)+":"+formatMilli(milliseconds);
+
+},10);
+
+}
+
+function pause(){
+clearInterval(timer);
+timer=null;
+}
+
+function reset(){
+clearInterval(timer);
+timer=null;
+
+minutes=0;
+seconds=0;
+milliseconds=0;
+lapCount=1;
+
+document.getElementById("display").innerText="00:00:000";
+document.getElementById("laps").innerHTML="";
+}
+
+function lap(){
+
+let time=document.getElementById("display").innerText;
+
+let li=document.createElement("li");
+li.innerText="Lap "+lapCount+" : "+time;
+
+document.getElementById("laps").appendChild(li);
+
+lapCount++;
+
+}
+
+function format(num){
+return num<10?"0"+num:num;
+}
+
+function formatMilli(num){
+if(num<10) return "00"+num;
+if(num<100) return "0"+num;
+return num;
+}
+
+</script>
+
+</body>
+</html>
