@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>To-Do List App</title>
+
+<style>
+
+body{
+    font-family: Arial;
+    background: linear-gradient(135deg,#6a11cb,#2575fc);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    margin:0;
+}
+
+.container{
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    width:350px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.3);
+}
+
+h2{
+    text-align:center;
+}
+
+input{
+    width:70%;
+    padding:8px;
+}
+
+button{
+    padding:8px 12px;
+    margin-left:5px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.add{
+    background:#28a745;
+    color:white;
+}
+
+.edit{
+    background:#ffc107;
+}
+
+.delete{
+    background:#dc3545;
+    color:white;
+}
+
+li{
+    list-style:none;
+    padding:8px;
+    margin-top:8px;
+    background:#f1f1f1;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-radius:5px;
+}
+
+.task-buttons button{
+    margin-left:5px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>To-Do List</h2>
+
+<input type="text" id="taskInput" placeholder="Enter a task">
+<button class="add" onclick="addTask()">Add</button>
+
+<ul id="taskList"></ul>
+
+</div>
+
+<script>
+
+function addTask(){
+
+let taskInput=document.getElementById("taskInput");
+let taskValue=taskInput.value;
+
+if(taskValue===""){
+alert("Please enter a task");
+return;
+}
+
+let li=document.createElement("li");
+
+li.innerHTML=`
+<span>${taskValue}</span>
+<div class="task-buttons">
+<button class="edit" onclick="editTask(this)">Edit</button>
+<button class="delete" onclick="deleteTask(this)">Delete</button>
+</div>
+`;
+
+document.getElementById("taskList").appendChild(li);
+
+taskInput.value="";
+}
+
+function deleteTask(button){
+button.parentElement.parentElement.remove();
+}
+
+function editTask(button){
+
+let taskSpan=button.parentElement.parentElement.querySelector("span");
+let newTask=prompt("Edit your task:",taskSpan.innerText);
+
+if(newTask!==null && newTask!==""){
+taskSpan.innerText=newTask;
+}
+
+}
+
+</script>
+
+</body>
+</html>
